@@ -4,34 +4,12 @@ var Vector2 = require('vector2');
 var Accel = require('ui/accel');
 var Vibe = require('ui/vibe');
 
-var parseFeed = function(data, quantity) {
-  var items = [];
-  for(var i = 0; i < quantity; i++) {
-    // Always upper case the description string
-    var title = data.list[i].weather[0].main;
-    title = title.charAt(0).toUpperCase() + title.substring(1);
-
-    // Get date/time substring
-    var time = data.list[i].dt_txt;
-    time = time.substring(time.indexOf('-') + 1, time.indexOf(':') + 3);
-
-    // Add to menu items array
-    items.push({
-      title:title,
-      subtitle:time
-    });
-  }
-
-  // Finally return whole array
-  return items;
-};
-
 
 var splashWindow = new UI.Window();
 var titleText = new UI.Text({
   position: new Vector2(0, 0),
   size: new Vector2(144, 30),
-  text:'Streak',
+  text:'$treak',
   font:'GOTHIC_28_BOLD',
   color:'black',
   textOverflow:'wrap',
@@ -55,18 +33,51 @@ splashWindow.add(titleText);
 splashWindow.add(streakDetails);
 splashWindow.show();
 
+var menuItems = [
+            {title: "Add Workout"}, 
+            {title: "Add Food Log"},
+            {title: "Streak Details"}
+        ];
 var mainMenu = new UI.Menu({
    sections: [{
         title: 'Welcome to Streak',
-     items: [{title: "Add Workout"}, {title: "Add Food Log"}]
+        items: menuItems
       }]
 });
-
 splashWindow.on('click', function(e) {
   mainMenu.show();
 });
 
+mainMenu.on('select', function(e) {
+  var tempCard = new UI.Card({
+    title: 'Selected ' + menuItems[e.itemIndex].title
+  });
+  tempCard.show();
+})
 
+
+
+// var parseFeed = function(data, quantity) {
+//   var items = [];
+//   for(var i = 0; i < quantity; i++) {
+//     // Always upper case the description string
+//     var title = data.list[i].weather[0].main;
+//     title = title.charAt(0).toUpperCase() + title.substring(1);
+
+//     // Get date/time substring
+//     var time = data.list[i].dt_txt;
+//     time = time.substring(time.indexOf('-') + 1, time.indexOf(':') + 3);
+
+//     // Add to menu items array
+//     items.push({
+//       title:title,
+//       subtitle:time
+//     });
+//   }
+
+//   // Finally return whole array
+//   return items;
+// };
 
 // // Make request to openweathermap.org
 // ajax(
